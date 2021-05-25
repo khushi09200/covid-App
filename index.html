@@ -1,0 +1,129 @@
+
+     <!-- API-APPLOCATION PROGRAMMING INTERFACE
+    1.ASYNCHRONUOS API(NON-BLOCKING)-Koi bhi api aayi to direct response ni deta just promise krta h baad me fulfill krega.sath me b
+    2. SYNCHRONOUS(BLOCKING)- directly fulfill krega wait ni krwaega next api ko
+    --HR API KO HIT KRNE KE LIYE ALAG METHOD HOTA H :
+    --API LOGICS-CRUD
+    C=create
+    R-READ
+    U=update
+    D=delete
+
+    HTTP METHODS--API HIT/DEFINE METHOD(JO CREATE KRTA H VHI DEFINE KREGA)
+    1.POST-IT IS USED TO"CREATE-C" LOGICS
+    2.GET= USED TO READ-R LOGICS-----USE ONLY THIS
+    3.UPDATE LOGIC K LIYE -A)PUT
+                          - B)PATCH
+    4.DELETE K LIYE DELETE -->
+    
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>COWIN</title>
+            <style>
+                body{
+                    margin: 0;
+                    padding :0;
+                }
+                #header{
+                    width:100%;
+                    height:100px;
+                    background-color: red;
+                    color:black;
+                    display:flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    font-weight: 900;
+                }
+                #forms{
+                    width:50%;
+                    margin:20px 25%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #result{
+                    width: 50%;
+                    margin: 20px 25%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+    
+                }
+                #active,#deaths,#critical,#recovered{
+                               width: 20%;
+                               height: 50px;
+                               background-color: rgb(199, 71, 71);
+                               color: white;
+                }
+            </style>
+        </head>
+        <body>
+         <!-- 1 dabba for header and logo -->
+           <div id="header">
+                <div id="logo">
+                    COVID 19 APP
+                </div>
+           </div>
+           <!-- 2 dabba for form and pass me button of search -->
+           <div id="forms">
+               <input type="text" placeholder="country name.." id="countryName">
+               <button id="searchBtn">SEARCH</button>
+    
+           </div>
+           <!--DABBA FOR RESULT-->
+           <div id="result">
+              
+           </div>
+              </body>
+     <script>
+         var countryName=document.getElementById("countryName");
+         var searchBtn=document.getElementById("searchBtn");
+         var result =document.getElementById("result");
+        //  ab apn chachte h koi event ho search btn pr click krte hi 
+        //so we use ADD EVENT searchBtn(means kuch krwana h btn e so we use addeventlistner)
+         //addeventlistner take 2 parameter 1)konsa event may be click  mouse hover 2)krwana kya h-use call back fun
+        searchBtn.addEventListener("click",function(e){
+            e.preventDefault();//--prevent kro default chiz(reload hote hi sb gaayb na ho)--js k under koi btn press krte h to page vapis reload hota h that means user ne jo bhi infon daali h udd jayegi after page reload
+            //get req k through data url me bejhte h server ko ----get--url--(data)--server
+            var url="https://coronavirus-19-api.herokuapp.com/countries/"+countryName.value;
+            console.log("url=",url);
+    
+            //to hit api and get response after using FETCH-isme api ka url passhota h ki use hit kro resaponse laaKE DO
+            fetch(url)
+            //.then --wait krta h us promise k resolve hona ka
+            .then((response)=>{
+                console.log(response);
+                   return response.json()//promise ke resposne ka body deta h json
+                   
+            })
+            .then((data)=>{
+                console.log(data);
+                renderList(data);
+            })
+            .catch((err)=>{
+                 console.log(err);
+            })
+         })
+      //renser list
+     function renderList(data){
+         
+         var html=`
+          <div id="active">
+                    ACTIVE CASES:${data.active}
+               </div>
+               <div  id="deaths">
+                 ACTIVE DEATHS:${data.deaths}
+              </div>
+              <div id="critical">
+              CRITICAL:${data.critical}
+              </div>
+              <div id="recovered">
+              RECOVERED
+              </div>`;
+              result.innerHTML=html;
+     }
+    
+     </script>
+    </html>
